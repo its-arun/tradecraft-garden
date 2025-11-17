@@ -14,14 +14,25 @@ This repository documents the groundbreaking research by Raphael Mudge (creator 
 
 The Tradecraft Garden project embodies the principle of **"leverage"** - developing technologies that grant individual researchers productivity advantages for rapid hypothesis testing and adaptation, rather than secretive proprietary approaches.
 
-## 📖 Blog Post Timeline
+## 📖 Source Material Timeline
 
+### Tradecraft Garden (Raphael Mudge)
 1. **June 4, 2025** - [Planting a Tradecraft Garden](https://aff-wg.org/2025/06/04/planting-a-tradecraft-garden/) - Initial project release
 2. **July 9, 2025** - [Tilling the Soil](https://aff-wg.org/2025/07/09/tradecraft-garden-tilling-the-soil/) - Binary Transform and COFF support
 3. **September 10, 2025** - [COFFing Out the Night Soil](https://aff-wg.org/2025/09/10/coffing-out-the-night-soil) - COFF normalization, merge, export
 4. **October 13, 2025** - [Weeding the Tradecraft Garden](https://aff-wg.org/2025/10/13/weeding-the-tradecraft-garden/) - PIC ergonomics and shared libraries
 5. **October 27, 2025** - [PIC Parterre](https://aff-wg.org/2025/10/27/tradecraft-gardens-pic-parterre/) - DFR revisited, fixbss, remap
 6. **November 10, 2025** - [Aspect-Oriented Programming](https://aff-wg.org/2025/11/10/tradecraft-engineering-with-aspect-oriented-programming/) - PIC/PICO instrumentation, exports
+
+### Community Research (Rasta Mouse)
+7. **October 28, 2025** - [Arranging the PIC Parterre](https://rastamouse.me/arranging-the-pic-parterre/) - Services PICO pattern
+8. **October 12, 2025** - [Crystal Kit](https://rastamouse.me/crystal-kit/) - Crystal Palace toolkit
+9. **September 14, 2025** - [Crystal Palace API](https://rastamouse.me/crystal-palace-api/) - Programmatic usage
+10. **July 25, 2025** - [Debugging the Tradecraft Garden](https://rastamouse.me/debugging-the-tradecraft-garden/) - Development techniques
+11. **December 2024** - [UDRL, SleepMask, and BeaconGate](https://rastamouse.me/udrl-sleepmask-and-beacongate/) - Cobalt Strike evasion
+
+### EDR Evasion Research (Offsec Almond)
+12. [Evading Elastic Callstack Signatures](https://offsec.almond.consulting/evading-elastic-callstack-signatures.html) - Call stack spoofing
 
 ## 🔧 Major Techniques Covered
 
@@ -49,6 +60,21 @@ Applying AOP principles to separate tradecraft from capability code through inst
 ### [Shared Libraries](./techniques/shared-libraries/)
 ZIP-based shared library architecture for PIC/PICO with conventions for code reuse and link-time optimization.
 
+### [UDRL and Sleep Mask](./techniques/udrl-sleepmask/)
+User-Defined Reflective Loaders, Sleep Masks, and BeaconGate for Cobalt Strike - advanced in-memory evasion and custom PE loading.
+
+### [EDR Evasion - Call Stack Spoofing](./techniques/edr-evasion/call-stack-spoofing/)
+Gadget-based call stack injection to evade EDR signature detection, specifically targeting Elastic Security patterns.
+
+### [Services PICO Pattern](./techniques/pic-organization/services-pattern/)
+Architectural pattern for organizing PIC code with centralized shared functionality and dual-resolver design.
+
+### [Crystal Palace API](./techniques/crystal-palace-api/)
+Programmatic usage of Crystal Palace for dynamic specification generation and automated capability building.
+
+### [Tradecraft Debugging](./techniques/tradecraft-debugging/)
+Development and debugging techniques for Tradecraft Garden projects using WSL, VS Code, and WinDbg.
+
 ## 🎓 Learning Path
 
 **For Beginners:**
@@ -63,8 +89,12 @@ ZIP-based shared library architecture for PIC/PICO with conventions for code reu
 
 **For Advanced:**
 1. Master [Aspect-Oriented Tradecraft](./techniques/aspect-oriented-tradecraft/)
-2. Build custom [Shared Libraries](./techniques/shared-libraries/)
-3. Combine techniques for complete evasion solutions
+2. Study [UDRL and Sleep Mask](./techniques/udrl-sleepmask/) for Beacon evasion
+3. Learn [EDR Evasion techniques](./techniques/edr-evasion/call-stack-spoofing/)
+4. Build custom [Shared Libraries](./techniques/shared-libraries/)
+5. Apply [Services PICO Pattern](./techniques/pic-organization/services-pattern/)
+6. Use [Crystal Palace API](./techniques/crystal-palace-api/) for automation
+7. Master [Debugging techniques](./techniques/tradecraft-debugging/)
 
 ## 🛠️ Repository Structure
 
@@ -82,15 +112,46 @@ This repository is for educational purposes, security research, authorized penet
 
 ## 🙏 Credits
 
-All research and techniques documented here are based on the work of **Raphael Mudge** and the Tradecraft Garden project. This repository serves as an educational companion to help security researchers understand and apply these advanced techniques.
+### Primary Research
+- **Raphael Mudge** - Creator of Tradecraft Garden, Crystal Palace, and Cobalt Strike
+- **Tradecraft Garden Project** - Core research and tooling
+
+### Community Contributors
+- **Rasta Mouse** - Services PICO pattern, Crystal Palace API usage, debugging techniques, UDRL/Sleep Mask integration
+- **Offsec Almond Consulting** - EDR evasion research (call stack spoofing)
+
+This repository serves as an educational companion to help security researchers understand and apply these advanced techniques.
 
 ## 📚 Additional Resources
 
+### Official Sites
 - [Tradecraft Garden Official Site](https://tradecraftgarden.org/)
 - [Tradecraft Garden Videos](https://tradecraftgarden.org/videos.html)
 - [Release Notes](https://tradecraftgarden.org/releasenotes.txt)
+- [AFF-WG Blog](https://aff-wg.org/) - Raphael Mudge's blog
+
+### Community Resources
+- [Rasta Mouse Blog](https://rastamouse.me/) - Advanced tradecraft techniques
+- [Offsec Almond Consulting](https://offsec.almond.consulting/) - EDR evasion research
+- [RESOURCES.md](./RESOURCES.md) - Comprehensive resource list with community projects
+
+### Community Projects
+- [LibTP](https://github.com/rasta-mouse/LibTP) - Thread Pool API proxying
+- [execute-assembly-pico](https://github.com/ofasgard/execute-assembly-pico) - CLR hosting PICO
+
+---
+
+## 📊 Repository Statistics
+
+- **14 Major Techniques** documented
+- **12 Source Blog Posts** analyzed
+- **50+ Documentation Files** created
+- **15,000+ Lines** of comprehensive documentation
+- **Multiple POC Examples** with working code
+- **Complete Coverage** of Tradecraft Garden ecosystem
 
 ---
 
 **Last Updated:** 2025-11-17
 **Curator:** Community-driven documentation project
+**Total Commits:** 5 comprehensive documentation commits
