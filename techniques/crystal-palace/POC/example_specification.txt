@@ -1,0 +1,260 @@
+# Crystal Palace Specification File Example
+#
+# This demonstrates common Crystal Palace specification patterns
+# for building various types of capabilities.
+#
+# Usage: ./link example_specification.txt
+
+# ============================================================================
+# EXAMPLE 1: Simple PIC with DFR
+# ============================================================================
+
+x64:
+  # Load capability object file
+  load "capability.x64.o"
+
+  # Configure dynamic function resolution
+  # Uses ROR13 hash-based resolution
+  dfr "resolve" "ror13"
+
+  # Generate position-independent code
+  # +optimize: Remove unused functions
+  # +mutate: Signature evasion
+  make pic +optimize +mutate
+
+  # Link final output
+  link "simple_capability.x64.bin"
+
+x86:
+  load "capability.x86.o"
+
+  # x86 needs pointer fixing for data access
+  dfr "resolve" "ror13"
+  fixptrs "_caller"
+
+  make pic +optimize +mutate
+
+  link "simple_capability.x86.bin"
+
+# ============================================================================
+# EXAMPLE 2: PIC with Appended Resources
+# ============================================================================
+
+x64:
+  # Load and configure loader
+  load "loader.x64.o"
+    dfr "resolve" "ror13"
+    fixbss "_bss_fix"
+    make pic +optimize +mutate +disco
+
+  # Append payload
+  load "payload.bin"
+    append $PIC
+
+  # Append configuration
+  load "config.bin"
+    append $PIC
+
+  link "loader_with_resources.x64.bin"
+
+# ============================================================================
+# EXAMPLE 3: PICO with Exports
+# ============================================================================
+
+x64:
+  load "pico_capability.x64.o"
+
+  # Export functions with tags
+  exportfunc "init" "__tag_init"
+  exportfunc "execute" "__tag_execute"
+  exportfunc "cleanup" "__tag_cleanup"
+
+  make pico +optimize +mutate
+
+  link "capability.pico"
+
+# ============================================================================
+# EXAMPLE 4: Modular Capability (COFF Merge)
+# ============================================================================
+
+x64:
+  # Load core module
+  load "core.x64.o"
+    merge
+
+  # Merge HTTP module
+  load "http.x64.o"
+    merge
+
+  # Merge crypto module
+  load "crypto.x64.o"
+    merge
+
+  # Merge utilities
+  load "utils.x64.o"
+    merge
+
+  # Create final PICO
+  exportfunc "go" "__tag_main"
+  make pico +optimize +disco +mutate
+
+  link "modular_capability.pico"
+
+# ============================================================================
+# EXAMPLE 5: Shared Library Integration
+# ============================================================================
+
+x64:
+  load "capability.x64.o"
+
+  # Merge shared library
+  mergelib "lib/libtcg.x64.zip"
+
+  # DFR configuration
+  dfr "resolve" "ror13" "KERNEL32, NTDLL"
+  dfr "resolve_ext" "strings"
+
+  # Generate with full transformations
+  make pic +optimize +disco +mutate +gofirst
+
+  link "capability_with_lib.x64.bin"
+
+# ============================================================================
+# EXAMPLE 6: Multi-Resolver Pattern
+# ============================================================================
+
+x64:
+  load "advanced_capability.x64.o"
+
+  # Core APIs via hash resolution (fast)
+  dfr "resolve_core" "ror13" "KERNEL32, NTDLL"
+
+  # Extended APIs via string resolution (can load new DLLs)
+  dfr "resolve_ext" "strings"
+
+  # Enable global variables
+  fixbss "_bss_fix"
+
+  make pic +optimize +mutate
+
+  link "advanced_capability.x64.bin"
+
+# ============================================================================
+# EXAMPLE 7: Aspect-Oriented Instrumentation
+# ============================================================================
+
+x64:
+  load "capability.x64.o"
+
+  # Attach API hooks for evasion
+  attach "KERNEL32$VirtualAlloc" "_StealthVirtualAlloc"
+  attach "KERNEL32$CreateThread" "_StealthCreateThread"
+  attach "WS2_32$send" "_EncryptSend"
+  attach "WS2_32$recv" "_DecryptRecv"
+
+  # Protect performance-critical functions from hooks
+  protect "performance_critical_function"
+
+  make pic +optimize +mutate
+
+  link "instrumented_capability.x64.bin"
+
+# ============================================================================
+# EXAMPLE 8: Dual-Architecture Build
+# ============================================================================
+
+# Both architectures from one specification
+x64:
+  load "universal_capability.x64.o"
+    dfr "resolve" "ror13"
+    fixbss "_bss_fix"
+    make pic +optimize +mutate +disco +gofirst
+  load "payload.bin"
+    append $PIC
+  link "capability.x64.bin"
+
+x86:
+  load "universal_capability.x86.o"
+    dfr "resolve" "ror13"
+    fixptrs "_caller"
+    fixbss "_bss_fix"
+    make pic +optimize +mutate +disco +gofirst
+  load "payload.bin"
+    append $PIC
+  link "capability.x86.bin"
+
+# ============================================================================
+# EXAMPLE 9: Encrypted Payload Container
+# ============================================================================
+
+x64:
+  # Small decrypter
+  load "decrypter.x64.o"
+    dfr "resolve" "ror13"
+    make pic +mutate
+
+  # Encrypted payload (pre-encrypted)
+  load "payload_encrypted.bin"
+    append $PIC
+
+  # Decryption key/config
+  load "key.bin"
+    append $PIC
+
+  link "encrypted_dropper.x64.bin"
+
+# ============================================================================
+# EXAMPLE 10: COFF Export for PICO Runner
+# ============================================================================
+
+x64:
+  # Build capability as COFF
+  load "capability.x64.o"
+    merge
+  load "module1.x64.o"
+    merge
+  load "module2.x64.o"
+    merge
+
+  # Export as normalized COFF
+  make coff +optimize +mutate
+
+  link "capability.o"
+
+  # Separately build PICO runner
+  load "pico_runner.x64.o"
+    dfr "resolve" "ror13"
+    make pic +optimize
+
+  # Append the COFF capability
+  load "capability.o"
+    append $PIC
+
+  link "runner_with_capability.x64.bin"
+
+# ============================================================================
+# NOTES
+# ============================================================================
+
+# Transformation Order:
+# 1. Parse and normalize COFF
+# 2. Apply DFR (dfr commands)
+# 3. Apply fixptrs/fixbss
+# 4. +optimize (before disco)
+# 5. +disco (randomize layout)
+# 6. +mutate (mutate randomized code)
+# 7. +gofirst (final positioning)
+# 8. Generate output
+
+# Best Practices:
+# - Always use +optimize with shared libraries
+# - Use +mutate for operational deployments
+# - Use +disco with +mutate for best evasion
+# - Use multi-resolver for flexibility
+# - Encrypt sensitive resources before appending
+
+# Performance:
+# +optimize: Size reduction 30-70%, slight speed improvement
+# +disco: No size/speed impact
+# +mutate: +5-15% size, slight speed decrease
+# +gofirst: No impact
